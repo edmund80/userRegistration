@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Healthcare System</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+   <nav class="nav">
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'patient_registration' %}">Patient Registration</a></li>
+            <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
+            <li><a href="{% url 'employee_registration' %}">Employee Registration</a></li>
+            <li><a href="{% url 'employee_login' %}">Employee Login</a></li>
+        </ul>
+    </nav>
+    <h1>Welcome to Group2 Health Care System</h1>
+  
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+<form method="POST" action="{% url 'create_billing_reminder' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Billing Reminder</button>
+</form>

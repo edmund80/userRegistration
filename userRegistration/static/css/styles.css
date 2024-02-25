@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    background-color: lightblue;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    justify-content: center;
+    text-align: center;
+
+}
+
+.nav {
+    height: 100px;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+}
+
+a {
+    text-decoration: none;
+    padding: 20px;
+}
+
+a li:hover {
+    color: blue;
+}
+
+a li:active {
+    color: blue;
+}
+
+img {
+    width: 800px;
+    margin-top: 100px;
+    padding: 0 300px;
+    align-items: center;
+    justify-self: center;
+}

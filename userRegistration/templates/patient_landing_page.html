@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Page</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+   <nav class="nav">
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'patient_registration' %}">Patient Registration</a></li>
+            <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
+            <li><a href="{% url 'employee_registration' %}">Employee Registration</a></li>
+            <li><a href="{% url 'employee_login' %}">Employee Login</a></li>
+        </ul>
+    </nav>
+    <h1>Welcome, {{ patient_profile.first_name }}!</h1>
+    <img src="{{ patient_profile.photo.url }}" alt="Patient Photo"><br><br>
+  <p>Your patient profile is up-to-date. <a href="{% url 'patient_profile' pk=patient_profile.pk %}">Update Profile</a></p>
+</body>
+</html>
