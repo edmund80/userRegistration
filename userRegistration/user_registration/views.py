@@ -198,11 +198,10 @@ def send_billing_reminders():
                     email['to'] = reminder.user.email
                     email['subject'] = reminder.message
 
-                    email.set_content(html.substitute({'name': 'TinTin'}), 'html')
 
                     with smtplib.SMTP(host='smtp.gmail.com', port=587) as smtp:
-                        email_address = 'genetestemail4@gmail.com'
-                        email_password = 'tyzg aslr ogbr nmdq'
+                        email_address = ''
+                        email_password = ''
                         smtp.ehlo()
                         smtp.starttls()
                         smtp.login(email_address, email_password)
@@ -210,10 +209,10 @@ def send_billing_reminders():
                         print('Billing Reminder Sent')
                 elif message_type == 'text':
                     # Send reminder via text (Twilio)
-                    client = Client('AC97e3598cdfb12747f679f825d0a71fc0', '1f075470898ee6f06a716c21dd300e98')
+                    client = Client('', '')
                     message = client.messages.create(
                         body=reminder.message,
-                        from_='+18336584459',
+                        from_='',
                         to=reminder.user.phone
                     )
                     # Log the SMS sent successfully message
