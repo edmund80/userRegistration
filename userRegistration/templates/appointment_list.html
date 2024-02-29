@@ -16,10 +16,14 @@
         </ul>
     </nav>
 <h1>Your Appointments</h1>
-    <ul>
-        {% for appointment in appointments %}
-            <li>{{ appointment.date }} at {{ appointment.time }} with {{ appointment.patient.first_name }} {{ appointment.patient.last_name }} {% if not appointment.confirmed %}<a href="{% url 'confirm_appointment' appointment.id %}>Confirm</a>{% endif %}</li>
-        {% endfor %}
-    </ul>
+<ul>
+    {% for appointment in appointments %}
+        <li>{{ appointment.date }} at {{ appointment.time }} 
+        {% if not appointment.confirmed %}
+            <a href="{% url 'confirm_appointment' appointment.id %}">Confirm</a>
+        {% endif %}
+        </li>
+    {% endfor %}
+</ul>
 </body>
 </html>
