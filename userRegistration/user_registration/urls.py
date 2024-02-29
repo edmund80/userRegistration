@@ -2,9 +2,10 @@ from django.urls import path
 from .views import home, PatientProfileListCreateView, PatientProfileRetrieveUpdateDestroyView, \
     EmployeeProfileListCreateView, \
     EmployeeProfileRetrieveUpdateDestroyView, patient_landing, patient_registration_view, employee_update_profile, \
-    employee_registration_view,\
+    employee_registration_view, \
     patient_update_profile, employee_login, patient_login, employee_landing, employee_profile, patient_profile, \
-    send_billing_reminders, create_billing_reminder
+    send_billing_reminders, create_billing_reminder, send_appointment_reminders, create_appointment_reminder, \
+    appointment_list, confirm_appointment
 
 urlpatterns = [
     path('home/', home, name='home'),
@@ -26,4 +27,8 @@ urlpatterns = [
     path('patient_profile/<int:pk>/', patient_profile, name='patient_profile'),
     path('send_billing_reminders/', send_billing_reminders, name='billing_reminders'),
     path('create_billing_reminder/', create_billing_reminder, name='create_billing_reminder'),
+    path('send_appointment_reminders/', send_appointment_reminders, name='appointment_reminders'),
+    path('create_appointment_reminder/', create_appointment_reminder, name='create_appointment_reminder'),
+    path('appointments/', appointment_list, name='appointment_list'),
+    path('appointments/<int:appointment_id>/confirm/', confirm_appointment, name='confirm_appointment'),
 ]

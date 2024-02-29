@@ -17,7 +17,7 @@
         </ul>
     </nav>
     <h1>Update Patient Profile</h1>
-    <form method="post">
+    <form class="form-control" method="post">
         {% csrf_token %}
         {{ form.as_p }}
        <button class="btn" type="submit">Submit</button>
