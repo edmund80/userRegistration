@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
-from user_registration.models import PatientProfile, EmployeeProfile, BillingReminder
+from user_registration.models import PatientProfile, EmployeeProfile, BillingReminder, AppointmentReminder
 
 
 class PatientRegistrationForm(forms.Form):
@@ -86,4 +86,10 @@ class EmployeeProfileForm(forms.ModelForm):
 class BillingReminderForm(forms.ModelForm):
     class Meta:
         model = BillingReminder
+        fields = ['message', 'send_datetime', 'user']
+
+
+class AppointmentReminderForm(forms.ModelForm):
+    class Meta:
+        model = AppointmentReminder
         fields = ['message', 'send_datetime', 'user']

@@ -1,9 +1,8 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Page</title>
+    <title>Appointment Reminders</title>
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
@@ -14,12 +13,15 @@
             <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
             <li><a href="{% url 'employee_registration' %}">Employee Registration</a></li>
             <li><a href="{% url 'employee_login' %}">Employee Login</a></li>
-            <li><a href="{% url 'appointment_list' %}">Appointment List</a></li>
         </ul>
     </nav>
-    <h1>Welcome, {{ employee_profile.first_name }}!</h1>
-    <img src="{{ employee_profile.photo.url }}" alt="Employee Photo"><br><br>
-    <p>Your employee profile is up-to-date. <a href="{% url 'employee_profile' pk=employee_profile.pk %}">Update Profile</a></p>
+
+   <h1>Appointment Reminders</h1>
+<form class="form-control" method="POST" action="{% url 'create_appointment_reminder' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Appointment Reminder</button>
+</form>
+
 </body>
-<script src="static/javascript/index.js"></script>
 </html>

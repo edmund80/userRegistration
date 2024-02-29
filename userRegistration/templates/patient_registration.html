@@ -12,12 +12,10 @@
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'patient_registration' %}">Patient Registration</a></li>
             <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
-            <li><a href="{% url 'employee_registration' %}">Employee Registration</a></li>
-            <li><a href="{% url 'employee_login' %}">Employee Login</a></li>
         </ul>
     </nav>
     <h1>Patient Registration</h1>
-    <form method="post" class="form-control">
+    <form class="form-control" method="post" class="form-control">
         {% csrf_token %}
         {{ form.as_p }}
         <button class="btn" type="submit">Submit</button>
