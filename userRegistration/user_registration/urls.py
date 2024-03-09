@@ -5,7 +5,7 @@ from .views import home, PatientProfileListCreateView, PatientProfileRetrieveUpd
     employee_registration_view, \
     patient_update_profile, employee_login, patient_login, employee_landing, employee_profile, patient_profile, \
     send_billing_reminders, create_billing_reminder, send_appointment_reminders, create_appointment_reminder, \
-    appointment_list, confirm_appointment
+    appointment_list, confirm_appointment, BillingStatementListView
 
 urlpatterns = [
     path('home/', home, name='home'),
@@ -31,4 +31,5 @@ urlpatterns = [
     path('create_appointment_reminder/', create_appointment_reminder, name='create_appointment_reminder'),
     path('appointments/', appointment_list, name='appointment_list'),
     path('appointments/<int:appointment_id>/confirm/', confirm_appointment, name='confirm_appointment'),
+    path('billing-statements/', BillingStatementListView.as_view(), name='billing_statements'),
 ]

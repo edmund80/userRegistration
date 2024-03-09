@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billing Statements</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+ <nav class="nav">
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'patient_registration' %}">Patient Registration</a></li>
+            <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
+            <li><a href="{% url 'employee_registration' %}">Employee Registration</a></li>
+            <li><a href="{% url 'employee_login' %}">Employee Login</a></li>
+        </ul>
+    </nav>
+    <h1>Billing Statements</h1>
+    <ul>
+        {% for billing_statement in billing_statements %}
+            <li>
+                <strong>Billing Period:</strong> {{ billing_statement.billing_period }}<br>
+                <strong>Statement Date:</strong> {{ billing_statement.statement_date }}<br>
+                <strong>Due Date:</strong> {{ billing_statement.due_date }}<br>
+                <strong>Total Charges:</strong> {{ billing_statement.total_charges }}<br>
+                <strong>Payments Received:</strong> {{ billing_statement.payments_received }}<br>
+                <strong>Outstanding Balance:</strong> {{ billing_statement.outstanding_balance }}<br>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
