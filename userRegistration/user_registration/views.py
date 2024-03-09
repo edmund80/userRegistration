@@ -1,17 +1,18 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.views.generic import ListView
 from rest_framework import generics
 from .serializers import PatientProfileSerializer, EmployeeProfileSerializer
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PatientRegistrationForm, EmployeeRegistrationForm, PatientLoginForm, EmployeeLoginForm, \
     PatientProfileForm, EmployeeProfileForm, BillingReminderForm, AppointmentReminderForm
-from .models import PatientProfile, EmployeeProfile, BillingReminder, AppointmentReminder, Appointment
+from .models import PatientProfile, EmployeeProfile, BillingReminder, AppointmentReminder, Appointment, BillingStatement
 from django.contrib.auth.models import User
-from twilio.rest import Client
 from datetime import datetime
-import smtplib
-from email.message import EmailMessage
-from string import Template
-from pathlib import Path
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -190,102 +191,40 @@ def confirm_appointment(request, appointment_id):
     return redirect('appointment_list')
 
 
-def send_billing_reminders():
+def send_billing_reminders(request):
     now = datetime.now()
     reminders = BillingReminder.objects.filter(send_datetime__lte=now)
     for reminder in reminders:
-        # Check for the user's preference
-        if reminder.user.email_billing_reminder or reminder.user.text_billing_reminder:
-            # Determine message type
-            message_type = 'email' if reminder.user.email_billing_reminder else 'text'
-
-            # Send Email Or Text Reminder
-            try:
-                if message_type == 'email':
-                    # Send reminder via email
-                    html = Template(Path('index.html').read_text())
-                    email = EmailMessage()
-                    email['from'] = 'Squad 2 Healthcare System'
-                    email['to'] = reminder.user.email
-                    email['subject'] = reminder.message
-
-                    email.set_content(html.substitute({'name': 'TinTin'}), 'html')
-
-                    with smtplib.SMTP(host='smtp.gmail.com', port=587) as smtp:
-                        email_address = ''
-                        email_password = ''
-                        smtp.ehlo()
-                        smtp.starttls()
-                        smtp.login(email_address, email_password)
-                        smtp.send_message(email)
-                        print('Billing Reminder Sent')
-                elif message_type == 'text':
-                    # Send reminder via text (Twilio)
-                    client = Client('', '')
-                    message = client.messages.create(
-                        body=reminder.message,
-                        from_='+18336584459',
-                        to=reminder.user.phone
-                    )
-                    # Log the SMS sent successfully message
-                    print(f'SMS sent successfully. SID: {message.sid}')
-
-            except Exception as e:
-                print(f'Error sending reminder: {e}')
-
+        if reminder.user.email_billing_reminder:
+            subject = "Billing Reminder"
+            html_message = render_to_string('billing_reminder_email_template.html', {'reminder': reminder})
+            plain_message = strip_tags(html_message)
+            from_email = 'your-email@example.com'
+            to_email = reminder.user.email
+            send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+            print('Billing Reminder Sent')
         else:
-            print('User has not opted in for reminders.')
-
-    # Delete the reminders after sending
+            print('User has not opted in for billing reminders.')
     reminders.delete()
+    return HttpResponse('Billing reminders sent successfully')
 
 
-def send_appointment_reminders():
+def send_appointment_reminders(request):
     now = datetime.now()
     reminders = AppointmentReminder.objects.filter(send_datetime__lte=now)
     for reminder in reminders:
-        # Check for the user's preference
-        if reminder.user.email_appointment_reminder or reminder.user.text_appointmenet_reminder:
-            # Determine message type
-            message_type = 'email' if reminder.user.email_appointment_reminder else 'text'
-
-            # Send Email Or Text Reminder
-            try:
-                if message_type == 'email':
-                    # Send reminder via email
-                    html = Template(Path('index.html').read_text())
-                    email = EmailMessage()
-                    email['from'] = 'Squad 2 Healthcare System'
-                    email['to'] = reminder.user.email
-                    email['subject'] = reminder.message
-
-                    with smtplib.SMTP(host='smtp.gmail.com', port=587) as smtp:
-                        email_address = ''
-                        email_password = ''
-                        smtp.ehlo()
-                        smtp.starttls()
-                        smtp.login(email_address, email_password)
-                        smtp.send_message(email)
-                        print('Appointment Reminder Sent')
-                elif message_type == 'text':
-                    # Send reminder via text (Twilio)
-                    client = Client('', '')
-                    message = client.messages.create(
-                        body=reminder.message,
-                        from_='',
-                        to=reminder.user.phone
-                    )
-                    # Log the SMS sent successfully message
-                    print(f'SMS sent successfully. SID: {message.sid}')
-
-            except Exception as e:
-                print(f'Error sending reminder: {e}')
-
+        if reminder.user.email_appointment_reminder:
+            subject = "Appointment Reminder"
+            html_message = render_to_string('appointment_reminder_email_template.html', {'reminder': reminder})
+            plain_message = strip_tags(html_message)
+            from_email = 'your-email@example.com'
+            to_email = reminder.user.email
+            send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+            print('Appointment Reminder Sent')
         else:
-            print('User has not opted in for reminders.')
-
-    # Delete the reminders after sending
+            print('User has not opted in for appointment reminders.')
     reminders.delete()
+    return HttpResponse('Appointment reminders sent successfully')
 
 
 def create_billing_reminder(request):
@@ -294,11 +233,11 @@ def create_billing_reminder(request):
         if form.is_valid():
             # Process the data in form.cleaned_data
             # Trigger the sending of billing reminders
-            send_billing_reminders()
+            send_billing_reminders(request)
             print('Billing Reminder Sent')
             # Reset the form
             form = BillingReminderForm()
-            return redirect('billing_reminders')
+        return redirect('billing_reminders')
     else:
         form = BillingReminderForm()
     return render(request, 'create_billing_reminder.html', {'form': form})
@@ -309,12 +248,22 @@ def create_appointment_reminder(request):
         form = AppointmentReminderForm(request.POST)
         if form.is_valid():
             # Process the data in form.cleaned_data
-            # Trigger the sending of billing reminders
-            send_appointment_reminders()
-            print('Billing Reminder Sent')
+            # Trigger the sending of appointment reminders
+            send_appointment_reminders(request)
+            print('Appointment Reminder Sent')
             # Reset the form
-            form = AppointmentReminderForm()
-            return redirect('appointment_reminders')
+        form = AppointmentReminderForm()
+        return redirect('appointment_reminders')
     else:
         form = AppointmentReminderForm()
     return render(request, 'create_appointment_reminder.html', {'form': form})
+
+
+class BillingStatementListView(LoginRequiredMixin, ListView):
+    model = BillingStatement
+    template_name = 'billing_statement_list.html'
+    context_object_name = 'billing_statements'
+
+    def get_queryset(self):
+        # Only show statements for logged-in user.
+        return BillingStatement.objects.filter(user=self.request.user)
