@@ -13,10 +13,23 @@
             <li><a href="{% url 'patient_registration' %}">Patient Registration</a></li>
             <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
             <li><a href="{% url 'appointment_list' %}">Appointment List</a></li>
+            <li><a href="{% url 'billing_statements' %}">Billing Statement</a></li>
         </ul>
     </nav>
-    <h1>Welcome, {{ patient_profile.first_name }}!</h1>
-    <img src="{{ patient_profile.photo.url }}" alt="Patient Photo"><br><br>
-  <p>Your patient profile is up-to-date. <a href="{% url 'patient_profile' pk=patient_profile.pk %}">Update Profile</a></p>
+   <section class="main">
+   <h1>Welcome, {{ patient_profile.first_name }}!</h1>
+   </section>
+   <section class="hero" style="display: flex; justify-content: center; align-content: center; padding: 40px;">
+   {% if patient_profile.image %}
+        <img class="image" src="{{ patient_profile.image.url }}" alt="Patient Photo"  style="width: 200px; padding: 20px;">
+    {% endif %}
+    <p>Your patient profile is up-to-date. <a href="{% url 'patient_profile' pk=patient_profile.pk %}">Update Profile</a></p>
+    {% if appointments_exist %}
+        <a href="{% url 'appointment_list' %}">
+            <img id="appointments" src="{% static 'media/images/appointments.jpeg' %}" alt="Appointments" style="width: 200px; align-content: center;"> 
+        </a>
+    {% endif %}
+</section>
+
 </body>
 </html>

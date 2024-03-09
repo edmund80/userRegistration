@@ -1,3 +1,5 @@
+{%  load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,8 +22,8 @@
 <form class="form-control" method="POST" action="{% url 'create_appointment_reminder' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Create Appointment Reminder</button>
+    <button id="submit" type="submit">Create Appointment Reminder</button>
 </form>
-
+<script src="{% static 'javascript/index.js' %}"></script>
 </body>
 </html>

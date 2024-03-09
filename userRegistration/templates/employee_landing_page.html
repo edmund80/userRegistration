@@ -14,12 +14,22 @@
             <li><a href="{% url 'patient_login' %}">Patient Login</a></li>
             <li><a href="{% url 'employee_registration' %}">Employee Registration</a></li>
             <li><a href="{% url 'employee_login' %}">Employee Login</a></li>
-            <li><a href="{% url 'appointment_list' %}">Appointment List</a></li>
+             <li><a href="{% url 'create_billing_reminder' %}">Billing Reminders</a></li>
+            <li><a href="{% url 'create_appointment_reminder' %}">Patient Appointment Reminders</a></li>
+            <li><a href="{% url 'billing_statements' %}">Billing Statement</a></li>
         </ul>
     </nav>
-    <h1>Welcome, {{ employee_profile.first_name }}!</h1>
-    <img src="{{ employee_profile.photo.url }}" alt="Employee Photo"><br><br>
-    <p>Your employee profile is up-to-date. <a href="{% url 'employee_profile' pk=employee_profile.pk %}">Update Profile</a></p>
+   <section class="main">
+        <h1>Welcome, {{ employee_profile.first_name }}!</h1><br><br>
+        {% if employee_profile.image %}
+        <img class="image" src="{{ employee_profile.image.url }}" alt="Employee Photo" style="width: 200px; align-content: center;">
+    {% endif %}
+    <p>Is your profile up-to-date? <a href="{% url 'employee_profile' pk=employee_profile.pk %}">Update Profile</a></p>
+    {% if appointments_exist %}
+        <a href="{% url 'appointment_list' %}">
+            <img id="appointments" src="{% static 'media/images/appointments.jpeg' %}" alt="Appointments" style="width: 200px; align-content: center;"> 
+        </a>
+    {% endif %}
+</section>
 </body>
-<script src="static/javascript/index.js"></script>
 </html>
